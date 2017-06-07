@@ -1,4 +1,4 @@
-package model;
+package model.plugins;
 
 import com.sun.istack.internal.NotNull;
 

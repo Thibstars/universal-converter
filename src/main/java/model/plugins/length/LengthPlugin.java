@@ -1,8 +1,6 @@
-package model.plugins;
+package model.plugins.length;
 
-import model.ImperialLength;
-import model.MetricLength;
-import model.Plugin;
+import model.plugins.Plugin;
 
 import java.util.HashMap;
 

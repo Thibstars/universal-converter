@@ -1,4 +1,4 @@
-package model;
+package model.plugins.length;
 
 /**
  * Created by thibault.helsmoortel on 07-Jun-17.

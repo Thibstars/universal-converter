@@ -1,6 +1,6 @@
 import model.Converter;
-import model.ImperialLength;
-import model.MetricLength;
+import model.plugins.length.ImperialLength;
+import model.plugins.length.MetricLength;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

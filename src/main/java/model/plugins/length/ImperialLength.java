@@ -1,13 +1,13 @@
-package model;
+package model.plugins.length;
 
 /**
  * Created by thibault.helsmoortel on 07-Jun-17.
  */
-public class MetricLength extends LengthObject {
+public class ImperialLength extends LengthObject {
 
     private final Unit unit;
 
-    public MetricLength(double length, Unit unit) {
+    public ImperialLength(double length, Unit unit) {
         super(length);
         this.unit = unit;
     }
@@ -17,7 +17,7 @@ public class MetricLength extends LengthObject {
     }
 
     public enum Unit {
-        NANOMETER, MICRON, MILLIMETER, CENTIMETER, METER, KILOMETER
+        INCH, FOOT, YARD, MILE, SEAMILE
     }
 
     @Override
@@ -30,7 +30,7 @@ public class MetricLength extends LengthObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MetricLength that = (MetricLength) o;
+        ImperialLength that = (ImperialLength) o;
 
         return unit == that.unit && getLength() == that.getLength();
     }

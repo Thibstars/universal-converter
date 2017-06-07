@@ -1,6 +1,10 @@
 package model;
 
-import model.plugins.LengthPlugin;
+import model.plugins.Plugin;
+import model.plugins.length.LengthPlugin;
+import model.plugins.length.ImperialLength;
+import model.plugins.length.LengthObject;
+import model.plugins.length.MetricLength;
 
 import java.util.ArrayList;
 import java.util.HashMap;
