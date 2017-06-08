@@ -1,116 +1,80 @@
 package model;
 
+import model.plugins.DefaultPlugin;
 import model.plugins.Plugin;
-import model.plugins.length.LengthPlugin;
-import model.plugins.length.ImperialLength;
-import model.plugins.length.LengthObject;
-import model.plugins.length.MetricLength;
+import org.reflections.Reflections;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * Created by thibault.helsmoortel on 07-Jun-17.
+ * Class responsible for all the conversions.
+ *
+ * @author Thibault Helsmoortel
  */
 public class Converter {
 
+    private static final Logger LOGGER = Logger.getLogger(Converter.class.getName());
+
     private static final List<Plugin> plugins;
-    private static final HashMap<String, Double> conversions;
 
     static {
         plugins = new ArrayList<>();
-        conversions = new HashMap<>();
 
-        // Register all default plugins
-        registerPlugin(new LengthPlugin());
-    }
+        // Register all default plugins using reflection
+        Reflections reflections = new Reflections("model.plugins");
+        Set<Class<? extends DefaultPlugin>> subTypes = reflections.getSubTypesOf(DefaultPlugin.class);
 
-    public static void registerPlugin(Plugin plugin) {
-        plugins.add(plugin);
-        conversions.putAll(plugin.getConversions());
-    }
-
-    public static void unregisterPlugin(Plugin plugin) {
-        plugins.remove(plugin);
-        conversions.forEach((key, value) -> {
-            if (plugin.getConversions().containsKey(key)) {
-                conversions.remove(key);
+        subTypes.forEach(aClass -> {
+            try {
+                registerPlugin(aClass.newInstance());
+            } catch (InstantiationException | IllegalAccessException e) {
+                LOGGER.log(Level.WARNING, String.format("Could not register plugin %s. \n%s", aClass.getSimpleName(), e));
+                e.printStackTrace();
             }
         });
     }
 
-    public static Object convert(Object source, Class target, Object... args) {
-        if (source instanceof LengthObject) {
-            if (source instanceof ImperialLength) {
-                if (target.equals(MetricLength.class)) {
-                    return imperialToMetricLength((ImperialLength) source);
-                } else if (target.equals(ImperialLength.class)) {
-                    return imperialToImperialLength((ImperialLength) source, (ImperialLength.Unit) args[0]);
-                }
+    /**
+     * Registers the given plugin, which is a requirement to perform the plugin's conversions.
+     *
+     * @param plugin the plugin to register
+     */
+    public static void registerPlugin(Plugin plugin) {
+        LOGGER.log(Level.INFO, String.format("Registering plugin %s by %s", plugin.getName(), plugin.getAuthor()));
+        plugins.add(plugin);
+    }
 
-            } else if (source instanceof MetricLength && target.equals(MetricLength.class)) {
-                return metricToMetricLength((MetricLength) source, (MetricLength.Unit) args[0]);
+    /**
+     * Deregisters the given plugin. Conversions of this plugin will no longer work.
+     *
+     * @param plugin the plugin to deregister
+     */
+    public static void deregisterPlugin(Plugin plugin) {
+        LOGGER.log(Level.INFO, String.format("Deregistering plugin %s by %s", plugin.getName(), plugin.getAuthor()));
+        plugins.remove(plugin);
+    }
+
+    /**
+     * The main conversion method that will return a registered plugin converter conversion value,
+     * but only if source and target are convertable classes in the plugin.
+     *
+     * @param source the source object to convert
+     * @param target the target class (class to convert the source to)
+     * @param args   optional arguments necessary in the conversion
+     * @return the conversion result of the plugin
+     */
+    public static Object convert(Object source, Class target, Object... args) {
+        for (Plugin plugin : plugins) {
+            List<Class> convertableClasses = plugin.getConvertableClasses();
+            if (convertableClasses.contains(source.getClass()) && convertableClasses.contains(target)) {
+                return plugin.getConverter().convert(source, target, args);
             }
         }
 
-        throw new IllegalArgumentException("Could not convert " + source.getClass().getSimpleName() + " to " + target);
-    }
-
-    private static ImperialLength imperialToImperialLength(ImperialLength imperialLength, ImperialLength.Unit target) {
-        double length = imperialLength.getLength();
-        ImperialLength.Unit impUnit = imperialLength.getUnit();
-
-        Double conversionRate = conversions.get(target.toString()) / conversions.get(impUnit.toString());
-        length = length / conversionRate;
-
-        return new ImperialLength(length, target);
-    }
-
-    private static MetricLength metricToMetricLength(MetricLength metricLength, MetricLength.Unit target) {
-        double length = metricLength.getLength();
-        MetricLength.Unit metUnit = metricLength.getUnit();
-
-        Double conversionRate = conversions.get(target.toString()) / conversions.get(metUnit.toString());
-        length = length / conversionRate;
-
-        return new MetricLength(length, target);
-    }
-
-    private static MetricLength imperialToMetricLength(ImperialLength imperialLength) {
-        MetricLength metricLength = null;
-        double length = imperialLength.getLength();
-        ImperialLength.Unit impUnit = imperialLength.getUnit();
-        Double conversionRate;
-
-        switch (impUnit) {
-            case INCH:
-                conversionRate = conversions.get(ImperialLength.Unit.INCH.toString());
-                length = length * conversionRate;
-                metricLength = new MetricLength(length, MetricLength.Unit.METER);
-                break;
-            case FOOT:
-                conversionRate = conversions.get(ImperialLength.Unit.FOOT.toString());
-                length = length * conversionRate;
-                metricLength = new MetricLength(length, MetricLength.Unit.METER);
-                break;
-            case YARD:
-                conversionRate = conversions.get(ImperialLength.Unit.YARD.toString());
-                length = length * conversionRate;
-                metricLength = new MetricLength(length, MetricLength.Unit.METER);
-                break;
-            case MILE:
-                conversionRate = conversions.get(ImperialLength.Unit.MILE.toString());
-                length = length * conversionRate;
-                metricLength = new MetricLength(length, MetricLength.Unit. METER);
-                break;
-            case SEAMILE:
-                conversionRate = conversions.get(ImperialLength.Unit.SEAMILE.toString());
-                length = length * conversionRate;
-                metricLength = new MetricLength(length, MetricLength.Unit.METER);
-                break;
-        }
-
-        return metricLength;
+        throw new IllegalArgumentException("Could not convert " + source.getClass().getSimpleName() + " to " + target.getSimpleName());
     }
 }

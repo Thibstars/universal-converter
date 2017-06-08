@@ -1,17 +1,19 @@
 package model.plugins.length;
 
 /**
- * Created by thibault.helsmoortel on 07-Jun-17.
+ * Class representing any type of length.
+ *
+ * @author Thibault Helsmoortel
  */
-public class LengthObject {
+class LengthObject {
 
     private final double length;
 
-    public LengthObject(double length) {
+    LengthObject(double length) {
         this.length = length;
     }
 
-    public double getLength() {
+    double getLength() {
         return length;
     }
 }

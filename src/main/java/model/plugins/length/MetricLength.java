@@ -1,7 +1,9 @@
 package model.plugins.length;
 
 /**
- * Created by thibault.helsmoortel on 07-Jun-17.
+ * Class representing metric length.
+ *
+ * @author Thibault Helsmoortel
  */
 public class MetricLength extends LengthObject {
 
@@ -14,10 +16,6 @@ public class MetricLength extends LengthObject {
 
     public Unit getUnit() {
         return unit;
-    }
-
-    public enum Unit {
-        NANOMETER, MICRON, MILLIMETER, CENTIMETER, METER, KILOMETER
     }
 
     @Override
@@ -38,5 +36,9 @@ public class MetricLength extends LengthObject {
     @Override
     public int hashCode() {
         return unit.hashCode() + ((int) (getLength() * Math.PI));
+    }
+
+    public enum Unit {
+        NANOMETER, MICRON, MILLIMETER, CENTIMETER, METER, KILOMETER
     }
 }
