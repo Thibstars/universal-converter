@@ -13,7 +13,7 @@ class LengthObject {
         this.length = length;
     }
 
-    double getLength() {
+    public double getLength() {
         return length;
     }
 }

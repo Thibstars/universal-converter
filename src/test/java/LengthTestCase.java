@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by thibault.helsmoortel on 07-Jun-17.
  */
-public class ConverterTestCase {
+public class LengthTestCase {
 
     @Test
     public void testMetricKMToM() {
@@ -63,5 +63,23 @@ public class ConverterTestCase {
 
         MetricLength expected = new MetricLength(30.48, MetricLength.Unit.CENTIMETER);
         assertTrue("Foot should be 30.48 cm.", expected.equals(actual) || expected.equals(Converter.convert(actual, MetricLength.class, expected.getUnit())));
+    }
+
+    @Test
+    public void testMetricCentimeterToImperial() {
+        MetricLength metricLength = new MetricLength(1, MetricLength.Unit.CENTIMETER);
+        Object actual = Converter.convert(metricLength, ImperialLength.class);
+
+        ImperialLength expected = new ImperialLength(0.3937007874015748, ImperialLength.Unit.INCH);
+        assertTrue("Cm should be 0.3937007874015748 inch.", expected.equals(actual) || expected.equals(Converter.convert(actual, ImperialLength.class, expected.getUnit())));
+    }
+
+    @Test
+    public void testMetricMeterToImperial() {
+        MetricLength metricLength = new MetricLength(1, MetricLength.Unit.METER);
+        Object actual = Converter.convert(metricLength, ImperialLength.class);
+
+        ImperialLength expected = new ImperialLength(3.280839895013123, ImperialLength.Unit.FOOT);
+        assertTrue("M should be 3.280839895013123 foot.", expected.equals(actual) || expected.equals(Converter.convert(actual, ImperialLength.class, expected.getUnit())));
     }
 }

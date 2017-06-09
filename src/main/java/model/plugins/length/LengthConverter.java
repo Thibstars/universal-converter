@@ -27,8 +27,12 @@ public class LengthConverter implements PluginConverter {
                     return imperialToImperialLength((ImperialLength) source, (ImperialLength.Unit) args[0]);
                 }
 
-            } else if (source instanceof MetricLength && target.equals(MetricLength.class)) {
-                return metricToMetricLength((MetricLength) source, (MetricLength.Unit) args[0]);
+            } else if (source instanceof MetricLength) {
+                if (target.equals(MetricLength.class)) {
+                    return metricToMetricLength((MetricLength) source, (MetricLength.Unit) args[0]);
+                } else if (target.equals(ImperialLength.class)) {
+                    return metricToImperialLength((MetricLength) source);
+                }
             }
         }
 
@@ -60,39 +64,29 @@ public class LengthConverter implements PluginConverter {
         return new MetricLength(length, target);
     }
 
+    private ImperialLength metricToImperialLength(MetricLength metricLength) {
+        ImperialLength imperialLength;
+
+        double length = metricLength.getLength();
+        MetricLength.Unit metUnit = metricLength.getUnit();
+        Double conversionRate;
+
+        conversionRate = (conversions.get(metUnit.toString()) / conversions.get(MetricLength.Unit.METER.toString())) / conversions.get(ImperialLength.Unit.FOOT.toString());
+        length = length * conversionRate;
+        imperialLength = new ImperialLength(length, ImperialLength.Unit.FOOT);
+
+        return imperialLength;
+    }
+
     private MetricLength imperialToMetricLength(ImperialLength imperialLength) {
-        MetricLength metricLength = null;
+        MetricLength metricLength;
         double length = imperialLength.getLength();
         ImperialLength.Unit impUnit = imperialLength.getUnit();
         Double conversionRate;
 
-        switch (impUnit) {
-            case INCH:
-                conversionRate = conversions.get(ImperialLength.Unit.INCH.toString());
-                length = length * conversionRate;
-                metricLength = new MetricLength(length, MetricLength.Unit.METER);
-                break;
-            case FOOT:
-                conversionRate = conversions.get(ImperialLength.Unit.FOOT.toString());
-                length = length * conversionRate;
-                metricLength = new MetricLength(length, MetricLength.Unit.METER);
-                break;
-            case YARD:
-                conversionRate = conversions.get(ImperialLength.Unit.YARD.toString());
-                length = length * conversionRate;
-                metricLength = new MetricLength(length, MetricLength.Unit.METER);
-                break;
-            case MILE:
-                conversionRate = conversions.get(ImperialLength.Unit.MILE.toString());
-                length = length * conversionRate;
-                metricLength = new MetricLength(length, MetricLength.Unit.METER);
-                break;
-            case SEAMILE:
-                conversionRate = conversions.get(ImperialLength.Unit.SEAMILE.toString());
-                length = length * conversionRate;
-                metricLength = new MetricLength(length, MetricLength.Unit.METER);
-                break;
-        }
+        conversionRate = conversions.get(impUnit.toString());
+        length = length * conversionRate;
+        metricLength = new MetricLength(length, MetricLength.Unit.METER);
 
         return metricLength;
     }
