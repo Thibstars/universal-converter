@@ -23,7 +23,7 @@
     <description>Convert anything to anything</description>
 
     <scm>
-        <developerConnection>scm:git:https://bitbucket.org/Thibstars/universal-converter.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/Thibstars/universal-converter.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
