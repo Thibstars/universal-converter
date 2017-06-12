@@ -12,6 +12,14 @@ public class Unit {
     private final double conversionRate;
     private final boolean base;
 
+    /**
+     * Class constructor specifying name, system, conversionRate and base.
+     *
+     * @param name           the unit's name
+     * @param system         the unit's system (applicable scope class)
+     * @param conversionRate the unit's conversionRate in relation to another base unit, if this isn't the base unit
+     * @param base           true to mark this unit as base unit (generally a conversionRate of 1d)
+     */
     public Unit(String name, Class system, double conversionRate, boolean base) {
         this.name = name;
         this.system = system;
