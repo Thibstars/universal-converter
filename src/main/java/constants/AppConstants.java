@@ -1,12 +1,16 @@
 package constants;
 
 /**
- * Created by thibault.helsmoortel on 08-Jun-17.
+ * Application constants.
+ *
+ * @author Thibault Helsmoortel
  */
 public class AppConstants {
 
+    public static final String APP_NAME = "Universal Converter";
     public static final String APP_AUTHOR = "Thibault Helsmoortel";
 
+    public static final String PLUGIN_DEFAULT = "[DEFAULT]";
     public static final String PLUGIN_LENGTH = "Length";
     public static final String PLUGIN_MASS = "Mass";
 }

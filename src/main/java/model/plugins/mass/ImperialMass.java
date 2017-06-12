@@ -1,5 +1,7 @@
 package model.plugins.mass;
 
+import model.Unit;
+
 /**
  * Class representing imperial mass.
  *
@@ -14,7 +16,7 @@ public class ImperialMass extends MassObject {
         this.unit = unit;
     }
 
-    public ImperialMass.Unit getUnit() {
+    public Unit getUnit() {
         return unit;
     }
 
@@ -36,9 +38,5 @@ public class ImperialMass extends MassObject {
     @Override
     public String toString() {
         return String.format("%s %s", getMass(), unit.toString().toLowerCase());
-    }
-
-    public enum Unit {
-        OUNCE, POUND, STONE, TON
     }
 }

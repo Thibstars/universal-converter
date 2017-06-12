@@ -1,10 +1,10 @@
 package model.plugins;
 
 import com.sun.istack.internal.NotNull;
+import model.Unit;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -17,7 +17,7 @@ public abstract class Plugin {
     private final String name;
     private final String author;
     private @NotNull
-    HashMap<String, Double> conversions;
+    List<Unit> conversions;
     private PluginConverter converter;
     private List<Class> convertableClasses;
 
@@ -31,7 +31,7 @@ public abstract class Plugin {
     public Plugin(String name, String author, Class... convertables) {
         this.name = name;
         this.author = author;
-        this.conversions = new HashMap<>(0);
+        this.conversions = new ArrayList<>(0);
         this.convertableClasses = new ArrayList<>();
         Collections.addAll(this.convertableClasses, convertables);
     }
@@ -44,7 +44,7 @@ public abstract class Plugin {
         return author;
     }
 
-    public HashMap<String, Double> getConversions() {
+    public List<Unit> getConversions() {
         return conversions;
     }
 

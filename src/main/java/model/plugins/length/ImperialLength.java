@@ -1,5 +1,7 @@
 package model.plugins.length;
 
+import model.Unit;
+
 /**
  * Class representing imperial length.
  *
@@ -36,9 +38,5 @@ public class ImperialLength extends LengthObject {
     @Override
     public int hashCode() {
         return unit.hashCode() + ((int) (getLength() * Math.PI));
-    }
-
-    public enum Unit {
-        INCH, FOOT, YARD, MILE, SEAMILE
     }
 }

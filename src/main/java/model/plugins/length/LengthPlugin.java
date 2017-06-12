@@ -1,9 +1,11 @@
 package model.plugins.length;
 
 import constants.AppConstants;
+import model.Unit;
 import model.plugins.DefaultPlugin;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Default length plugin class. Automatically registered in the {@link model.Converter}.
@@ -15,19 +17,19 @@ public class LengthPlugin extends DefaultPlugin {
     public LengthPlugin() {
         super(AppConstants.PLUGIN_LENGTH, AppConstants.APP_AUTHOR, ImperialLength.class, MetricLength.class);
 
-        HashMap<String, Double> conversions = new HashMap<>();
-        conversions.put(MetricLength.Unit.KILOMETER.toString(), 1000d);
-        conversions.put(MetricLength.Unit.METER.toString(), 1d);
-        conversions.put(MetricLength.Unit.CENTIMETER.toString(), 0.01);
-        conversions.put(MetricLength.Unit.MILLIMETER.toString(), 0.001);
-        conversions.put(MetricLength.Unit.MICRON.toString(), 0.0001);
-        conversions.put(MetricLength.Unit.NANOMETER.toString(), 0.00001);
+        List<Unit> conversions = new ArrayList<>();
+        conversions.add(new Unit("kilometer", MetricLength.class, 1000d, false));
+        conversions.add(new Unit("meter", MetricLength.class, 1d, true));
+        conversions.add(new Unit("centimeter", MetricLength.class, 0.01, false));
+        conversions.add(new Unit("millimeter", MetricLength.class, 0.001, false));
+        conversions.add(new Unit("micron", MetricLength.class, 0.0001, false));
+        conversions.add(new Unit("nanometer", MetricLength.class, 0.00001, false));
 
-        conversions.put(ImperialLength.Unit.INCH.toString(), 0.0254);
-        conversions.put(ImperialLength.Unit.FOOT.toString(), 0.3048);
-        conversions.put(ImperialLength.Unit.YARD.toString(), 0.9144);
-        conversions.put(ImperialLength.Unit.MILE.toString(), 0.000621);
-        conversions.put(ImperialLength.Unit.SEAMILE.toString(), 0.00054);
+        conversions.add(new Unit("inch", ImperialLength.class, 0.0254, false));
+        conversions.add(new Unit("foot", ImperialLength.class, 0.3048, false));
+        conversions.add(new Unit("yard", ImperialLength.class, 0.9144, false));
+        conversions.add(new Unit("mile", ImperialLength.class, 0.000621, false));
+        conversions.add(new Unit("seamile", ImperialLength.class, 0.00054, false));
         setConverter(new LengthConverter(conversions));
     }
 }

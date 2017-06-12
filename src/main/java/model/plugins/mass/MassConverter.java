@@ -1,62 +1,60 @@
 package model.plugins.mass;
 
+import model.Unit;
 import model.plugins.PluginConverter;
 
-import java.util.HashMap;
+import java.util.List;
 
 /**
  * Converter class for the {@link MassPlugin}.
  *
  * @author Thibault Helsmoortel
  */
-public class MassConverter implements PluginConverter {
+public class MassConverter extends PluginConverter {
 
-    private final HashMap<String, Double> conversions;
+    private Unit poundUnit;
 
-    MassConverter(HashMap<String, Double> conversions) {
-        this.conversions = conversions;
+    MassConverter(List<Unit> conversions) {
+        super(conversions);
+        this.poundUnit = getUnit("pound");
     }
 
     @Override
-    public Object convert(Object source, Class target, Object... args) {
+    public Object convert(Object source, Unit target, Object... args) {
         if (source instanceof MassObject) {
             if (source instanceof MetricMass) {
-                if (target.equals(MetricMass.class)) {
-                    return metricToMetricMass((MetricMass) source, (MetricMass.Unit) args[0]);
-                } else if (target.equals(ImperialMass.class)) {
+                if (target.getSystem().equals(MetricMass.class)) {
+                    return metricToMetricMass((MetricMass) source, target);
+                } else if (target.getSystem().equals(ImperialMass.class)) {
                     return metricToImperialMass((MetricMass) source);
                 }
             } else if (source instanceof ImperialMass) {
-                if (target.equals(ImperialMass.class)) {
-                    return imperialToImperialMass((ImperialMass) source, (ImperialMass.Unit) args[0]);
-                } else if (target.equals(MetricMass.class)) {
+                if (target.getSystem().equals(ImperialMass.class)) {
+                    return imperialToImperialMass((ImperialMass) source, target);
+                } else if (target.getSystem().equals(MetricMass.class)) {
                     return imperialToMetricMass((ImperialMass) source);
                 }
             }
         }
-        throw new IllegalArgumentException("Could not convert " + source.getClass().getSimpleName() + " to " + target);
+
+        throw new IllegalArgumentException("Could not convert " + source.getClass().getSimpleName() + " to " + target.getName());
     }
 
-    @Override
-    public HashMap<String, Double> getConversions() {
-        return conversions;
-    }
-
-    private MetricMass metricToMetricMass(MetricMass metricMass, MetricMass.Unit target) {
+    private MetricMass metricToMetricMass(MetricMass metricMass, Unit target) {
         double mass = metricMass.getMass();
-        MetricMass.Unit metUnit = metricMass.getUnit();
+        Unit metUnit = metricMass.getUnit();
 
-        Double conversionRate = conversions.get(target.toString()) / conversions.get(metUnit.toString());
+        Double conversionRate = target.getConversionRate() / metUnit.getConversionRate();
         mass = mass / conversionRate;
 
         return new MetricMass(mass, target);
     }
 
-    private ImperialMass imperialToImperialMass(ImperialMass imperialMass, ImperialMass.Unit target) {
+    private ImperialMass imperialToImperialMass(ImperialMass imperialMass, Unit target) {
         double mass = imperialMass.getMass();
-        ImperialMass.Unit impUnit = imperialMass.getUnit();
+        Unit impUnit = imperialMass.getUnit();
 
-        Double conversionRate = conversions.get(target.toString()) / conversions.get(impUnit.toString());
+        Double conversionRate = target.getConversionRate() / impUnit.getConversionRate();
         mass = mass / conversionRate;
 
         return new ImperialMass(mass, target);
@@ -65,13 +63,13 @@ public class MassConverter implements PluginConverter {
     private ImperialMass metricToImperialMass(MetricMass metricMass) {
         ImperialMass imperialMass;
         double mass = metricMass.getMass();
-        MetricMass.Unit metUnit = metricMass.getUnit();
+        Unit metUnit = metricMass.getUnit();
         Double conversionRate;
 
-        conversionRate = (conversions.get(metUnit.toString()) / conversions.get(MetricMass.Unit.KILOGRAM.toString())) / conversions.get(ImperialMass.Unit.POUND.toString());
+        conversionRate = (metUnit.getConversionRate() / 1) / poundUnit.getConversionRate();
         mass = mass * conversionRate;
 
-        imperialMass = new ImperialMass(mass, ImperialMass.Unit.POUND);
+        imperialMass = new ImperialMass(mass, poundUnit);
 
         return imperialMass;
     }
@@ -79,12 +77,12 @@ public class MassConverter implements PluginConverter {
     private MetricMass imperialToMetricMass(ImperialMass imperialMass) {
         MetricMass metricMass;
         double mass = imperialMass.getMass();
-        ImperialMass.Unit impUnit = imperialMass.getUnit();
+        Unit impUnit = imperialMass.getUnit();
         Double conversionRate;
 
-        conversionRate = conversions.get(impUnit.toString());
+        conversionRate = impUnit.getConversionRate();
         mass = mass * conversionRate;
-        metricMass = new MetricMass(mass, MetricMass.Unit.KILOGRAM);
+        metricMass = new MetricMass(mass, baseUnit);
 
         return metricMass;
     }

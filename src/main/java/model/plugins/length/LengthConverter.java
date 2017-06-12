@@ -1,64 +1,60 @@
 package model.plugins.length;
 
+import model.Unit;
 import model.plugins.PluginConverter;
 
-import java.util.HashMap;
+import java.util.List;
 
 /**
  * Converter class for the {@link LengthPlugin}.
  *
  * @author Thibault Helsmoortel
  */
-public class LengthConverter implements PluginConverter {
+public class LengthConverter extends PluginConverter {
 
-    private final HashMap<String, Double> conversions;
+    private Unit footUnit;
 
-    LengthConverter(HashMap<String, Double> conversions) {
-        this.conversions = conversions;
+    LengthConverter(List<Unit> conversions) {
+        super(conversions);
+        this.footUnit = getUnit("foot");
     }
 
     @Override
-    public Object convert(Object source, Class target, Object... args) {
+    public Object convert(Object source, Unit target, Object... args) {
         if (source instanceof LengthObject) {
-            if (source instanceof ImperialLength) {
-                if (target.equals(MetricLength.class)) {
-                    return imperialToMetricLength((ImperialLength) source);
-                } else if (target.equals(ImperialLength.class)) {
-                    return imperialToImperialLength((ImperialLength) source, (ImperialLength.Unit) args[0]);
-                }
-
-            } else if (source instanceof MetricLength) {
-                if (target.equals(MetricLength.class)) {
-                    return metricToMetricLength((MetricLength) source, (MetricLength.Unit) args[0]);
-                } else if (target.equals(ImperialLength.class)) {
+            if (source instanceof MetricLength) {
+                if (target.getSystem().equals(MetricLength.class)) {
+                    return metricToMetricLength((MetricLength) source, target);
+                } else if (target.getSystem().equals(ImperialLength.class)) {
                     return metricToImperialLength((MetricLength) source);
+                }
+            } else if (source instanceof ImperialLength) {
+                if (target.getSystem().equals(ImperialLength.class)) {
+                    return imperialToImperialLength((ImperialLength) source, target);
+                } else if (target.getSystem().equals(MetricLength.class)) {
+                    return imperialToMetricLength((ImperialLength) source);
                 }
             }
         }
 
-        throw new IllegalArgumentException("Could not convert " + source.getClass().getSimpleName() + " to " + target);
+        throw new IllegalArgumentException("Could not convert " + source.getClass().getSimpleName() + " to " + target.getName());
     }
 
-    @Override
-    public HashMap<String, Double> getConversions() {
-        return conversions;
-    }
-
-    private ImperialLength imperialToImperialLength(ImperialLength imperialLength, ImperialLength.Unit target) {
+    private ImperialLength imperialToImperialLength(ImperialLength imperialLength, Unit target) {
         double length = imperialLength.getLength();
-        ImperialLength.Unit impUnit = imperialLength.getUnit();
+        Unit impUnit = imperialLength.getUnit();
 
-        Double conversionRate = conversions.get(target.toString()) / conversions.get(impUnit.toString());
+        Double conversionRate = target.getConversionRate() / impUnit.getConversionRate();
         length = length / conversionRate;
 
         return new ImperialLength(length, target);
     }
 
-    private MetricLength metricToMetricLength(MetricLength metricLength, MetricLength.Unit target) {
+    private MetricLength metricToMetricLength(MetricLength metricLength, Unit target) {
         double length = metricLength.getLength();
-        MetricLength.Unit metUnit = metricLength.getUnit();
+        Unit metUnit = metricLength.getUnit();
 
-        Double conversionRate = conversions.get(target.toString()) / conversions.get(metUnit.toString());
+        Double conversionRate = target.getConversionRate() / metUnit.getConversionRate();
         length = length / conversionRate;
 
         return new MetricLength(length, target);
@@ -68,12 +64,12 @@ public class LengthConverter implements PluginConverter {
         ImperialLength imperialLength;
 
         double length = metricLength.getLength();
-        MetricLength.Unit metUnit = metricLength.getUnit();
+        Unit metUnit = metricLength.getUnit();
         Double conversionRate;
 
-        conversionRate = (conversions.get(metUnit.toString()) / conversions.get(MetricLength.Unit.METER.toString())) / conversions.get(ImperialLength.Unit.FOOT.toString());
+        conversionRate = (metUnit.getConversionRate() / 1) / footUnit.getConversionRate();
         length = length * conversionRate;
-        imperialLength = new ImperialLength(length, ImperialLength.Unit.FOOT);
+        imperialLength = new ImperialLength(length, footUnit);
 
         return imperialLength;
     }
@@ -81,12 +77,12 @@ public class LengthConverter implements PluginConverter {
     private MetricLength imperialToMetricLength(ImperialLength imperialLength) {
         MetricLength metricLength;
         double length = imperialLength.getLength();
-        ImperialLength.Unit impUnit = imperialLength.getUnit();
+        Unit impUnit = imperialLength.getUnit();
         Double conversionRate;
 
-        conversionRate = conversions.get(impUnit.toString());
+        conversionRate = impUnit.getConversionRate();
         length = length * conversionRate;
-        metricLength = new MetricLength(length, MetricLength.Unit.METER);
+        metricLength = new MetricLength(length, baseUnit);
 
         return metricLength;
     }

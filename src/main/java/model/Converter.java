@@ -58,23 +58,28 @@ public class Converter {
         plugins.remove(plugin);
     }
 
+    public static List<Plugin> getPlugins() {
+        return new ArrayList<>(plugins);
+    }
+
     /**
      * The main conversion method that will return a registered plugin converter conversion value,
      * but only if source and target are convertable classes in the plugin.
      *
      * @param source the source object to convert
-     * @param target the target class (class to convert the source to)
+     * @param target the target unit
      * @param args   optional arguments necessary in the conversion
      * @return the conversion result of the plugin
      */
-    public static Object convert(Object source, Class target, Object... args) {
+    public static Object convert(Object source, Unit target, Object... args) {
         for (Plugin plugin : plugins) {
             List<Class> convertableClasses = plugin.getConvertableClasses();
-            if (convertableClasses.contains(source.getClass()) && convertableClasses.contains(target)) {
+            List<Unit> conversionUnits = plugin.getConverter().getConversions();
+            if (convertableClasses.contains(source.getClass()) && conversionUnits.contains(target)) {
                 return plugin.getConverter().convert(source, target, args);
             }
         }
 
-        throw new IllegalArgumentException("Could not convert " + source.getClass().getSimpleName() + " to " + target.getSimpleName());
+        throw new IllegalArgumentException("Could not convert " + source.getClass().getSimpleName() + " to " + target.getName());
     }
 }

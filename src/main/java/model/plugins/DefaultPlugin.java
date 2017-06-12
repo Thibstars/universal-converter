@@ -1,5 +1,7 @@
 package model.plugins;
 
+import constants.AppConstants;
+
 /**
  * Class representing default plugins, that is, a plugin that is supported by default.
  * Subclasses will be automatically registered in the {@link model.Converter}.
@@ -8,9 +10,9 @@ package model.plugins;
  *
  * @author Thibault Helsmoortel
  */
-public class DefaultPlugin extends Plugin {
+public abstract class DefaultPlugin extends Plugin {
 
     protected DefaultPlugin(String name, String author, Class... convertables) {
-        super("[DEFAULT]" + name, author, convertables);
+        super(AppConstants.PLUGIN_DEFAULT + name, author, convertables);
     }
 }
