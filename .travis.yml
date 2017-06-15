@@ -1,0 +1,14 @@
+sudo: true
+
+language: java
+
+jdk:
+  - oraclejdk8
+
+os:
+- linux
+#- osx
+
+script: ant build
+
+script: mvn test -B
