@@ -1,5 +1,6 @@
 import constants.AppConstants;
-import model.Converter;
+import controller.ConverterController;
+import model.Unit;
 import model.plugins.Plugin;
 import model.plugins.length.ImperialLength;
 import model.plugins.length.LengthConverter;
@@ -7,8 +8,7 @@ import model.plugins.length.MetricLength;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Test case for the {@link model.plugins.length.LengthPlugin}.
@@ -17,11 +17,13 @@ import static org.junit.Assert.assertTrue;
  */
 public class LengthTestCase {
 
+    private ConverterController controller;
     private LengthConverter lengthConverter;
 
     @Before
     public void setUp() throws Exception {
-        for (Plugin plugin : Converter.getPlugins()) {
+        this.controller = new ConverterController();
+        for (Plugin plugin : controller.getPlugins()) {
             if (plugin.getName().contains(AppConstants.PLUGIN_LENGTH)) {
                 lengthConverter = (LengthConverter) plugin.getConverter();
             }
@@ -29,9 +31,24 @@ public class LengthTestCase {
     }
 
     @Test
+    public void lengthObjectShouldReturnValue() throws Exception {
+        MetricLength metricLength = new MetricLength(5.5d, new Unit("meter", MetricLength.class, 1d, true));
+        Object value = metricLength.getValue();
+        assertValue(value);
+        ImperialLength imperialLength = new ImperialLength(5.5d, new Unit("mile", ImperialLength.class, 1d, true));
+        value = imperialLength.getValue();
+        assertValue(value);
+    }
+
+    private void assertValue(Object value) {
+        assertNotNull("Value must not be null", value);
+        assertEquals("Value must be correct.", 5.5d, value);
+    }
+
+    @Test
     public void testMetricKMToM() {
         MetricLength metricLength = new MetricLength(1, lengthConverter.getUnit("kilometer"));
-        Object actual = Converter.convert(metricLength, lengthConverter.getUnit("meter"));
+        Object actual = controller.convert(metricLength, lengthConverter.getUnit("meter"));
 
         MetricLength expected = new MetricLength(1000, lengthConverter.getUnit("meter"));
         assertEquals("KM should be 1000m.", expected, actual);
@@ -40,7 +57,7 @@ public class LengthTestCase {
     @Test
     public void testMetricMToKM() {
         MetricLength metricLength = new MetricLength(1000, lengthConverter.getUnit("meter"));
-        Object actual = Converter.convert(metricLength, lengthConverter.getUnit("kilometer"));
+        Object actual = controller.convert(metricLength, lengthConverter.getUnit("kilometer"));
 
         MetricLength expected = new MetricLength(1, lengthConverter.getUnit("kilometer"));
         assertEquals("KM should be 1000m.", expected, actual);
@@ -49,7 +66,7 @@ public class LengthTestCase {
     @Test
     public void testImperialInchToFoot() {
         ImperialLength imperialLength = new ImperialLength(1, lengthConverter.getUnit("inch"));
-        Object actual = Converter.convert(imperialLength, lengthConverter.getUnit("foot"));
+        Object actual = controller.convert(imperialLength, lengthConverter.getUnit("foot"));
 
         ImperialLength expected = new ImperialLength(0.08333333333333331, lengthConverter.getUnit("foot"));
         assertEquals("Inch should be 0.083333 foot.", expected, actual);
@@ -58,7 +75,7 @@ public class LengthTestCase {
     @Test
     public void testImperialFootToInches() {
         ImperialLength imperialLength = new ImperialLength(1, lengthConverter.getUnit("foot"));
-        Object actual = Converter.convert(imperialLength, lengthConverter.getUnit("inch"));
+        Object actual = controller.convert(imperialLength, lengthConverter.getUnit("inch"));
 
         ImperialLength expected = new ImperialLength(12, lengthConverter.getUnit("inch"));
         assertEquals("Inch should be 0.083333 foot.", expected, actual);
@@ -67,36 +84,36 @@ public class LengthTestCase {
     @Test
     public void testImperialInchToMetric() {
         ImperialLength imperialLength = new ImperialLength(1, lengthConverter.getUnit("inch"));
-        Object actual = Converter.convert(imperialLength, lengthConverter.getUnit("centimeter"));
+        Object actual = controller.convert(imperialLength, lengthConverter.getUnit("centimeter"));
 
         MetricLength expected = new MetricLength(2.54, lengthConverter.getUnit("centimeter"));
-        assertTrue("Inch should be 2.54 cm.", expected.equals(actual) || expected.equals(Converter.convert(actual, expected.getUnit())));
+        assertTrue("Inch should be 2.54 cm.", expected.equals(actual) || expected.equals(controller.convert(actual, expected.getUnit())));
     }
 
     @Test
     public void testImperialFootToMetric() {
         ImperialLength imperialLength = new ImperialLength(1, lengthConverter.getUnit("foot"));
-        Object actual = Converter.convert(imperialLength, lengthConverter.getUnit("centimeter"));
+        Object actual = controller.convert(imperialLength, lengthConverter.getUnit("centimeter"));
 
         MetricLength expected = new MetricLength(30.48, lengthConverter.getUnit("centimeter"));
-        assertTrue("Foot should be 30.48 cm.", expected.equals(actual) || expected.equals(Converter.convert(actual, expected.getUnit())));
+        assertTrue("Foot should be 30.48 cm.", expected.equals(actual) || expected.equals(controller.convert(actual, expected.getUnit())));
     }
 
     @Test
     public void testMetricCentimeterToImperial() {
         MetricLength metricLength = new MetricLength(1, lengthConverter.getUnit("centimeter"));
-        Object actual = Converter.convert(metricLength, lengthConverter.getUnit("inch"));
+        Object actual = controller.convert(metricLength, lengthConverter.getUnit("inch"));
 
         ImperialLength expected = new ImperialLength(0.3937007874015748, lengthConverter.getUnit("inch"));
-        assertTrue("Cm should be 0.3937007874015748 inch.", expected.equals(actual) || expected.equals(Converter.convert(actual, expected.getUnit())));
+        assertTrue("Cm should be 0.3937007874015748 inch.", expected.equals(actual) || expected.equals(controller.convert(actual, expected.getUnit())));
     }
 
     @Test
     public void testMetricMeterToImperial() {
         MetricLength metricLength = new MetricLength(1, lengthConverter.getUnit("meter"));
-        Object actual = Converter.convert(metricLength, lengthConverter.getUnit("foot"));
+        Object actual = controller.convert(metricLength, lengthConverter.getUnit("foot"));
 
         ImperialLength expected = new ImperialLength(3.280839895013123, lengthConverter.getUnit("foot"));
-        assertTrue("M should be 3.280839895013123 foot.", expected.equals(actual) || expected.equals(Converter.convert(actual, expected.getUnit())));
+        assertTrue("M should be 3.280839895013123 foot.", expected.equals(actual) || expected.equals(controller.convert(actual, expected.getUnit())));
     }
 }
