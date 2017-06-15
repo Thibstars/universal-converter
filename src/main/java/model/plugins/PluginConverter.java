@@ -1,5 +1,6 @@
 package model.plugins;
 
+import model.Convertible;
 import model.Unit;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public abstract class PluginConverter {
         }
     }
 
-    public abstract Object convert(Object source, Unit target, Object... args);
+    public abstract Convertible convert(Object source, Unit target, Object... args);
 
     public List<Unit> getConversions() {
         return conversions;

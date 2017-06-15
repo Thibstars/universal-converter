@@ -1,5 +1,6 @@
 package model.plugins.mass;
 
+import model.Convertible;
 import model.Unit;
 import model.plugins.PluginConverter;
 
@@ -20,7 +21,7 @@ public class MassConverter extends PluginConverter {
     }
 
     @Override
-    public Object convert(Object source, Unit target, Object... args) {
+    public Convertible convert(Object source, Unit target, Object... args) {
         if (source instanceof MassObject) {
             if (source instanceof MetricMass) {
                 if (target.getSystem().equals(MetricMass.class)) {

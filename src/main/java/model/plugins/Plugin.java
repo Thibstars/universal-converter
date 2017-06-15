@@ -22,18 +22,18 @@ public abstract class Plugin {
     private List<Class> convertableClasses;
 
     /**
-     * Constructor initializing name, author and all the convertable classes.
+     * Constructor initializing name, author and all the convertible classes.
      *
      * @param name         the plugin name
      * @param author       the main plugin author
-     * @param convertables the convertable classes in this plugin
+     * @param convertibles the convertible classes in this plugin
      */
-    public Plugin(String name, String author, Class... convertables) {
+    public Plugin(String name, String author, Class... convertibles) {
         this.name = name;
         this.author = author;
         this.conversions = new ArrayList<>(0);
         this.convertableClasses = new ArrayList<>();
-        Collections.addAll(this.convertableClasses, convertables);
+        Collections.addAll(this.convertableClasses, convertibles);
     }
 
     public String getName() {
@@ -59,5 +59,10 @@ public abstract class Plugin {
 
     public List<Class> getConvertableClasses() {
         return convertableClasses;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

@@ -64,18 +64,18 @@ public class Converter {
 
     /**
      * The main conversion method that will return a registered plugin converter conversion value,
-     * but only if source and target are convertable classes in the plugin.
+     * but only if source and target are convertible classes in the plugin.
      *
      * @param source the source object to convert
      * @param target the target unit
      * @param args   optional arguments necessary in the conversion
      * @return the conversion result of the plugin
      */
-    public static Object convert(Object source, Unit target, Object... args) {
+    public static Convertible convert(Object source, Unit target, Object... args) {
         for (Plugin plugin : plugins) {
-            List<Class> convertableClasses = plugin.getConvertableClasses();
+            List<Class> convertibleClasses = plugin.getConvertableClasses();
             List<Unit> conversionUnits = plugin.getConverter().getConversions();
-            if (convertableClasses.contains(source.getClass()) && conversionUnits.contains(target)) {
+            if (convertibleClasses.contains(source.getClass()) && conversionUnits.contains(target)) {
                 return plugin.getConverter().convert(source, target, args);
             }
         }

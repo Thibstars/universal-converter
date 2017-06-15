@@ -12,7 +12,12 @@ import constants.AppConstants;
  */
 public abstract class DefaultPlugin extends Plugin {
 
-    protected DefaultPlugin(String name, String author, Class... convertables) {
-        super(AppConstants.PLUGIN_DEFAULT + name, author, convertables);
+    protected DefaultPlugin(String name, String author, Class... convertibles) {
+        super(AppConstants.PLUGIN_DEFAULT + name, author, convertibles);
+    }
+
+    @Override
+    public String toString() {
+        return getName().replace(AppConstants.PLUGIN_DEFAULT, "");
     }
 }

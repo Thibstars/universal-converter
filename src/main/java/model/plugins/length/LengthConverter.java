@@ -1,5 +1,6 @@
 package model.plugins.length;
 
+import model.Convertible;
 import model.Unit;
 import model.plugins.PluginConverter;
 
@@ -20,7 +21,7 @@ public class LengthConverter extends PluginConverter {
     }
 
     @Override
-    public Object convert(Object source, Unit target, Object... args) {
+    public Convertible convert(Object source, Unit target, Object... args) {
         if (source instanceof LengthObject) {
             if (source instanceof MetricLength) {
                 if (target.getSystem().equals(MetricLength.class)) {

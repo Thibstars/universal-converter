@@ -42,4 +42,9 @@ public class Unit {
     public boolean isBase() {
         return base;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
