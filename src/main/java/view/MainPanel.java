@@ -1,6 +1,6 @@
 package view;
 
-import model.Converter;
+import controller.ConverterController;
 import model.Convertible;
 import model.Unit;
 import model.plugins.Plugin;
@@ -20,6 +20,8 @@ import java.text.NumberFormat;
  */
 public class MainPanel extends JPanel {
 
+    private final ConverterController converterController;
+
     private JComboBox<Plugin> cbPlugin;
     private JComboBox<Unit> cbFrom;
     private JComboBox<Unit> cbTo;
@@ -28,6 +30,7 @@ public class MainPanel extends JPanel {
     private JLabel lblTo;
 
     public MainPanel() {
+        this.converterController = new ConverterController();
         initLayout();
         addListeners();
     }
@@ -36,7 +39,7 @@ public class MainPanel extends JPanel {
         setLayout(new BorderLayout());
 
         cbPlugin = new JComboBox<>();
-        Converter.getPlugins().forEach(plugin -> cbPlugin.addItem(plugin));
+        converterController.getPlugins().forEach(plugin -> cbPlugin.addItem(plugin));
         cbPlugin.setBounds(5, 0, 90, 20);
         cbFrom = new JComboBox<>();
         cbFrom.setBounds(5, 25, 90, 20);
@@ -118,7 +121,7 @@ public class MainPanel extends JPanel {
             e.printStackTrace();
         }
         if (source != null) {
-            Convertible converted = Converter.convert(source, unitTo);
+            Convertible converted = converterController.convert(source, unitTo);
             lblTo.setText(converted.getValue().toString());
         }
     }
