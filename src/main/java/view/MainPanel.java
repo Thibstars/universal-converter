@@ -1,5 +1,6 @@
 package view;
 
+import constants.AppConstants;
 import controller.ConverterController;
 import model.Convertible;
 import model.Unit;
@@ -28,6 +29,8 @@ public class MainPanel extends JPanel {
 
     private JFormattedTextField tfFrom;
     private JLabel lblTo;
+
+    private JButton btnInfo;
 
     public MainPanel() {
         this.converterController = new ConverterController();
@@ -69,8 +72,11 @@ public class MainPanel extends JPanel {
         pnlConversion.add(pnlFrom);
         pnlConversion.add(pnlTo);
 
+        btnInfo = new JButton("About");
+
         add(cbPlugin, BorderLayout.PAGE_START);
         add(pnlConversion, BorderLayout.CENTER);
+        add(btnInfo, BorderLayout.PAGE_END);
 
         setOpaque(true);
     }
@@ -84,6 +90,12 @@ public class MainPanel extends JPanel {
         tfFrom.getDocument().addDocumentListener((TextFieldValueChangeListener) e -> tryPerformConversion());
         cbFrom.addActionListener(e -> tryPerformConversion());
         cbTo.addActionListener(e -> tryPerformConversion());
+
+        btnInfo.addActionListener(e -> {
+            Plugin plugin = ((Plugin) cbPlugin.getSelectedItem());
+            String appIconCredit = "https://icons8.com/icon/21703/Convertible";
+            JOptionPane.showMessageDialog(this, String.format("%s by %s.\nPlugin: %s by %s\nApplication icon: %s", AppConstants.APP_NAME, AppConstants.APP_AUTHOR, plugin, plugin.getAuthor(), appIconCredit));
+        });
     }
 
     private boolean tryPerformConversion() {
