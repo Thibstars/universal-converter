@@ -41,9 +41,4 @@ class LengthObject extends Convertible {
     public int hashCode() {
         return unit.hashCode() + ((int) (getLength() * Math.PI));
     }
-
-    @Override
-    public Object getValue() {
-        return value;
-    }
 }

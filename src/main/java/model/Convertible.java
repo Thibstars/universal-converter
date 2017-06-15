@@ -15,5 +15,7 @@ public abstract class Convertible {
         this.unit = unit;
     }
 
-    public abstract Object getValue();
+    public Object getValue() {
+        return value;
+    }
 }

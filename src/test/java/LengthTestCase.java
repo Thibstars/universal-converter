@@ -1,6 +1,5 @@
 import constants.AppConstants;
 import controller.ConverterController;
-import model.Unit;
 import model.plugins.Plugin;
 import model.plugins.length.ImperialLength;
 import model.plugins.length.LengthConverter;
@@ -8,7 +7,8 @@ import model.plugins.length.MetricLength;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test case for the {@link model.plugins.length.LengthPlugin}.
@@ -28,21 +28,6 @@ public class LengthTestCase {
                 lengthConverter = (LengthConverter) plugin.getConverter();
             }
         }
-    }
-
-    @Test
-    public void lengthObjectShouldReturnValue() throws Exception {
-        MetricLength metricLength = new MetricLength(5.5d, new Unit("meter", MetricLength.class, 1d, true));
-        Object value = metricLength.getValue();
-        assertValue(value);
-        ImperialLength imperialLength = new ImperialLength(5.5d, new Unit("mile", ImperialLength.class, 1d, true));
-        value = imperialLength.getValue();
-        assertValue(value);
-    }
-
-    private void assertValue(Object value) {
-        assertNotNull("Value must not be null", value);
-        assertEquals("Value must be correct.", 5.5d, value);
     }
 
     @Test

@@ -13,4 +13,5 @@ public class AppConstants {
     public static final String PLUGIN_DEFAULT = "[DEFAULT]";
     public static final String PLUGIN_LENGTH = "Length";
     public static final String PLUGIN_MASS = "Mass";
+    public static final String PLUGIN_TEMPERATURE = "Temperature";
 }

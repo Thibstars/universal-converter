@@ -41,9 +41,4 @@ public class MassObject extends Convertible {
     public String toString() {
         return String.format("%s %s", getMass(), unit.toString().toLowerCase());
     }
-
-    @Override
-    public Object getValue() {
-        return value;
-    }
 }

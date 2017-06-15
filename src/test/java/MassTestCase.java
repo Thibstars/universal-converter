@@ -1,6 +1,5 @@
 import constants.AppConstants;
 import controller.ConverterController;
-import model.Unit;
 import model.plugins.Plugin;
 import model.plugins.mass.ImperialMass;
 import model.plugins.mass.MassConverter;
@@ -8,7 +7,8 @@ import model.plugins.mass.MetricMass;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test case for the {@link model.plugins.mass.MassPlugin}.
@@ -28,22 +28,6 @@ public class MassTestCase {
                 massConverter = (MassConverter) plugin.getConverter();
             }
         }
-
-    }
-
-    @Test
-    public void massObjectShouldReturnValue() throws Exception {
-        MetricMass metricMass = new MetricMass(5.5d, new Unit("kilogram", MetricMass.class, 1d, true));
-        Object value = metricMass.getValue();
-        assertValue(value);
-        ImperialMass imperialMass = new ImperialMass(5.5d, new Unit("ounce", ImperialMass.class, 1d, true));
-        value = imperialMass.getValue();
-        assertValue(value);
-    }
-
-    private void assertValue(Object value) {
-        assertNotNull("Value must not be null", value);
-        assertEquals("Value must be correct.", 5.5d, value);
     }
 
     @Test
