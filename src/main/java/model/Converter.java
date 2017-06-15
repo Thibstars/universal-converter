@@ -73,7 +73,7 @@ public class Converter {
      */
     public static Convertible convert(Object source, Unit target, Object... args) {
         for (Plugin plugin : plugins) {
-            List<Class> convertibleClasses = plugin.getConvertableClasses();
+            List<Class> convertibleClasses = plugin.getConvertibleClasses();
             List<Unit> conversionUnits = plugin.getConverter().getConversions();
             if (convertibleClasses.contains(source.getClass()) && conversionUnits.contains(target)) {
                 return plugin.getConverter().convert(source, target, args);

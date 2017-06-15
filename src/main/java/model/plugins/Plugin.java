@@ -1,6 +1,5 @@
 package model.plugins;
 
-import com.sun.istack.internal.NotNull;
 import model.Unit;
 
 import java.util.ArrayList;
@@ -16,10 +15,9 @@ public abstract class Plugin {
 
     private final String name;
     private final String author;
-    private @NotNull
-    List<Unit> conversions;
+    private List<Unit> conversions;
     private PluginConverter converter;
-    private List<Class> convertableClasses;
+    private List<Class> convertibleClasses;
 
     /**
      * Constructor initializing name, author and all the convertible classes.
@@ -32,8 +30,8 @@ public abstract class Plugin {
         this.name = name;
         this.author = author;
         this.conversions = new ArrayList<>(0);
-        this.convertableClasses = new ArrayList<>();
-        Collections.addAll(this.convertableClasses, convertibles);
+        this.convertibleClasses = new ArrayList<>();
+        Collections.addAll(this.convertibleClasses, convertibles);
     }
 
     public String getName() {
@@ -57,8 +55,8 @@ public abstract class Plugin {
         this.conversions = converter.getConversions();
     }
 
-    public List<Class> getConvertableClasses() {
-        return convertableClasses;
+    public List<Class> getConvertibleClasses() {
+        return convertibleClasses;
     }
 
     @Override
