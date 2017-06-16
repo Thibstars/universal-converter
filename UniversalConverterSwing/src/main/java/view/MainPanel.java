@@ -92,9 +92,13 @@ public class MainPanel extends JPanel {
         cbTo.addActionListener(e -> tryPerformConversion());
 
         btnInfo.addActionListener(e -> {
-            Plugin plugin = ((Plugin) cbPlugin.getSelectedItem());
-            String appIconCredit = "https://icons8.com/icon/21703/Convertible";
-            JOptionPane.showMessageDialog(this, String.format("%s by %s.\nPlugin: %s by %s\nApplication icon: %s", AppConstants.APP_NAME, AppConstants.APP_AUTHOR, plugin, plugin.getAuthor(), appIconCredit));
+            StringBuilder about = new StringBuilder().
+                    append(String.format("%s by %s", AppConstants.APP_NAME, AppConstants.APP_AUTHOR));
+            for (Plugin plugin : converterController.getPlugins()) {
+                about.append(String.format("\nPlugin \'%s\' by %s", plugin, plugin.getAuthor()));
+            }
+            about.append(String.format("\nApplication icon: %s", AppConstants.APP_ICON_CREDITS));
+            JOptionPane.showMessageDialog(this, about);
         });
     }
 
