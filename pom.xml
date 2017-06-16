@@ -8,11 +8,12 @@
     <artifactId>universal-converter</artifactId>
     <packaging>pom</packaging>
     <version>0.1-SNAPSHOT</version>
+    <name>UniversalConverter</name>
+    <description>Convert anything to anything</description>
+
     <modules>
         <module>UniversalConverterSwing</module>
     </modules>
-    <name>UniversalConverter</name>
-    <description>Convert anything to anything</description>
 
     <build>
         <resources>
@@ -54,18 +55,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.7</version>
-                <configuration>
-                    <formats>
-                        <format>html</format>
-                        <format>xml</format>
-                    </formats>
-                    <check />
-                </configuration>
             </plugin>
         </plugins>
     </build>
