@@ -1,6 +1,7 @@
+package model.plugins;
+
 import constants.AppConstants;
 import controller.ConverterController;
-import model.plugins.Plugin;
 import model.plugins.length.ImperialLength;
 import model.plugins.length.LengthConverter;
 import model.plugins.length.MetricLength;

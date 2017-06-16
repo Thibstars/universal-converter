@@ -2,6 +2,7 @@ package model;
 
 import model.plugins.DefaultPlugin;
 import model.plugins.Plugin;
+import model.plugins.util.PluginUtils;
 import org.reflections.Reflections;
 
 import java.util.ArrayList;
@@ -30,10 +31,9 @@ public class Converter {
 
         subTypes.forEach(aClass -> {
             try {
-                registerPlugin(aClass.newInstance());
+                registerPlugin(PluginUtils.createPluginInstance(aClass));
             } catch (InstantiationException | IllegalAccessException e) {
                 LOGGER.log(Level.WARNING, String.format("Could not register plugin %s. \n%s", aClass.getSimpleName(), e));
-                e.printStackTrace();
             }
         });
     }

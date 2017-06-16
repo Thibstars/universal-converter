@@ -1,6 +1,7 @@
+package model.plugins;
+
 import constants.AppConstants;
 import controller.ConverterController;
-import model.plugins.Plugin;
 import model.plugins.mass.ImperialMass;
 import model.plugins.mass.MassConverter;
 import model.plugins.mass.MetricMass;

@@ -1,6 +1,7 @@
+package model.plugins;
+
 import constants.AppConstants;
 import controller.ConverterController;
-import model.plugins.Plugin;
 import model.plugins.temperature.Celsius;
 import model.plugins.temperature.Fahrenheit;
 import model.plugins.temperature.Kelvin;
@@ -34,7 +35,7 @@ public class TemperatureTestCase {
     @Test
     public void testCelsiusToCelsius() throws Exception {
         Celsius celsius = new Celsius(19.3, converter.getUnit("celsius"));
-        Object actual = converter.convert(celsius, converter.getUnit("celsius"));
+        Object actual = controller.convert(celsius, converter.getUnit("celsius"));
 
         Celsius expected = new Celsius(19.3, converter.getUnit("celsius"));
         assertEquals("19.3 Celsius must be 19.3 Celsius.", expected, actual);
@@ -61,7 +62,7 @@ public class TemperatureTestCase {
     @Test
     public void testFahrenheitToFahrenheit() throws Exception {
         Fahrenheit fahrenheit = new Fahrenheit(57.7, converter.getUnit("fahrenheit"));
-        Object actual = converter.convert(fahrenheit, converter.getUnit("fahrenheit"));
+        Object actual = controller.convert(fahrenheit, converter.getUnit("fahrenheit"));
 
         Fahrenheit expected = new Fahrenheit(57.7, converter.getUnit("fahrenheit"));
         assertEquals("57.7 Fahrenheit must be 57.7 Fahrenheit.", expected, actual);
@@ -88,7 +89,7 @@ public class TemperatureTestCase {
     @Test
     public void testKelvinToKelvin() throws Exception {
         Kelvin kelvin = new Kelvin(288.15d, converter.getUnit("kelvin"));
-        Object actual = converter.convert(kelvin, converter.getUnit("kelvin"));
+        Object actual = controller.convert(kelvin, converter.getUnit("kelvin"));
 
         Kelvin expected = new Kelvin(288.15d, converter.getUnit("kelvin"));
         assertEquals("288.15 Kelvin must be 288.15 Kelvin.", expected, actual);
