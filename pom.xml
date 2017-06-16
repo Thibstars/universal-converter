@@ -6,7 +6,11 @@
 
     <groupId>be.thibaulthelsmoortel</groupId>
     <artifactId>universal-converter</artifactId>
+    <packaging>pom</packaging>
     <version>0.1-SNAPSHOT</version>
+    <modules>
+        <module>UniversalConverterSwing</module>
+    </modules>
     <name>UniversalConverter</name>
     <description>Convert anything to anything</description>
 
